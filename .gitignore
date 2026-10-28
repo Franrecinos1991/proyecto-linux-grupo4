@@ -1,0 +1,4 @@
+capturas/
+*.log
+*.swp
+.DS_Store
