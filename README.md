@@ -1,8 +1,3 @@
-Aquí tienes el `README.md` regenerado y actualizado. He ordenado a los integrantes **alfabéticamente por su primer apellido** y he incluido sus correos institucionales. Además, les he asignado los roles (adminsys, tecnico, visitante) de forma lógica para que la tabla se vea completa.
-
-Copia todo este bloque y pégalo en tu archivo `README.md`:
-
-```markdown
 # 🐧 Proyecto Final: Servidor Linux Automatizado (Grupo 4)
 
 [![UES](https://img.shields.io/badge/Universidad-El%20Salvador-blue.svg)](#)
@@ -25,6 +20,10 @@ Este proyecto consiste en la implementación de un servidor Linux (Debian) autom
     - [Fase 2: Automatización y Monitoreo](#fase-2-automatización-y-monitoreo)
     - [Fase 3: Control de Versiones](#fase-3-control-de-versiones)
     - [Fase 4: Docker y Contenedores](#fase-4-docker-y-contenedores)
+    - [Fase 5: Servidor Web Containerizado](#fase-5-servidor-web-containerizado)
+    - [Fase 6: Docker Avanzado](#fase-6-docker-avanzado)
+    - [Fase 7: Redes y Volúmenes Docker](#fase-7-redes-y-volúmenes-docker)
+    - [Fase 8: Pruebas y Verificación Final](#fase-8-pruebas-y-verificación-final)
 6. [Instalación y Despliegue](#-instalación-y-despliegue)
 
 ---
@@ -63,7 +62,7 @@ El proyecto está centralizado en el directorio `/proyecto/` con la siguiente es
 ├── web/            # Archivos del sitio web (Grupo: web, SetGID activo)
 ├── .gitignore      # Archivos excluidos del control de versiones
 ├── README.md       # Documentación del proyecto
-└── Dockerfile      # (Próximamente) Configuración de imagen personalizada
+└── Dockerfile      # Configuración de imagen personalizada de Nginx
 ```
 
 ---
@@ -101,8 +100,25 @@ El proyecto está centralizado en el directorio `/proyecto/` con la siguiente es
 * Configuración del archivo `.gitignore`.
 * Sincronización con el repositorio remoto en GitHub.
 
-### Fase 4: Docker y Contenedores *(En desarrollo)*
-* Próximamente: Instalación de Docker, despliegue de Nginx, redes y volúmenes persistentes.
+### Fase 4: Docker y Contenedores
+* Instalación de Docker Engine en el sistema y configuración del servicio de arranque automático.
+* Asignación de los usuarios `adminsys` y `tecnico` al grupo `docker` para permitir la ejecución de contenedores sin privilegios de superusuario (`sudo`).
+
+### Fase 5: Servidor Web Containerizado
+* Creación de una página web estática (`index.html`) personalizada.
+* Despliegue de un contenedor Nginx en el puerto `8080`, mapeando el directorio local `/proyecto/web/` mediante un volumen tipo bind mount.
+
+### Fase 6: Docker Avanzado
+* Elaboración de un `Dockerfile` personalizado basado en `nginx:latest`, integrando los archivos web directamente en la imagen.
+* Construcción de la imagen personalizada `servidor-grupo4` y despliegue de un nuevo contenedor en el puerto `8081`.
+
+### Fase 7: Redes y Volúmenes Docker
+* Creación de la red interna `red-proyecto` y despliegue del contenedor `nginx-red` conectado a dicha red en el puerto `8082`.
+* Creación del volumen persistente `volumen-web` y despliegue de un cuarto contenedor Nginx en el puerto `8083`.
+
+### Fase 8: Pruebas y Verificación Final
+* Pruebas de conectividad (ping) desde un contenedor temporal Alpine hacia el servidor `nginx-red` haciendo uso de resolución DNS interna.
+* Verificación de la ejecución ininterrumpida de la tarea cron de monitoreo.
 
 ---
 
@@ -120,13 +136,14 @@ El proyecto está centralizado en el directorio `/proyecto/` con la siguiente es
    ```bash
    ./scripts/reporte_sistema.sh
    ```
-4. **Revisar los logs del cron:**
+4. **Desplegar Servidor Web (Ejemplo Puerto 8080):**
+   ```bash
+   docker run -d --name mi-nginx-basico -p 8080:80 -v $(pwd)/web:/usr/share/nginx/html nginx:latest
+   ```
+5. **Revisar los logs del sistema:**
    ```bash
    tail -f /var/log/proyecto/reporte_sistema.log
    ```
 
 ---
 *Este proyecto fue desarrollado para la Universidad de El Salvador (UES) - Ciclo II 2026.*
-```
-
----
